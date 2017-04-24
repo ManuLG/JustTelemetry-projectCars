@@ -2,13 +2,13 @@
 #include <windows.h>
 #include "sharedmemory.h"
 #include <stdio.h>
+#include <conio.h>
 #include <string.h>
 #include <iostream>
 #include <fstream>
 
 #using < System.dll >
 using namespace System;
-using namespace System::IO::Ports;
 using namespace std;
 
 #pragma warning(disable:4996)
@@ -42,11 +42,6 @@ int main()
 		printf( "Data version mismatch\n");
 		return 1;
 	}
-
-	// arduino settings
-	//SerialPort^ arduino;
-	//arduino = gcnew SerialPort("COM8", 9600);
-	//arduino->Open();
 
 	ofstream myfile;
 	myfile.open("fichero.json");
@@ -89,9 +84,6 @@ int main()
 			tiempo *= 1000;
 
 			float km = sharedData->mOdometerKM;
-			//printf("Dirección: %f  --  Acelerador: %f\n", direccion, throttle);
-			//printf("Eje X: %f  --  Eje Y: %f\n", fuerza_g_x, fuerza_g_y);
-			//printf("Tyre height DI: %f -- Tyre Y DI: %f\n", sharedData->mTyreSlipSpeed[0], sharedData->mTyreSlipSpeed[2]);
 
 			// [X, Y, di_rpm, dd_rpm, ti_rpm, td_rpm, direccion, throttle, fuerza_g_x, fuerza_g_y, tiempo]
 			myfile << "[" << x << "," << y << ","; // Posicion
@@ -101,6 +93,16 @@ int main()
 			myfile << tiempo << "," << km << "],\n"; // Tiempo en milisegundos
 
 			Sleep(100);
+
+			// Cleanup
+			if (_kbhit() != 0) {
+				myfile << "]\n";
+				myfile.close();
+				UnmapViewOfFile(sharedData);
+				CloseHandle(fileHandle);
+
+				return 0;
+			}
 		}
 		//printf( "mGameState: (%d)\n", sharedData->mGameState );
 		//printf( "mSessionState: (%d)\n", sharedData->mSessionState );
@@ -108,28 +110,5 @@ int main()
 		//printf("maxRPM: (%f)\n", sharedData->mMaxRPM);
 		//printf("mRPM: (%f)\n", sharedData->mRpm);
 		//system("cls");
-
-		/*sprintf(buf, "rpm%.2f;", sharedData->mRpm);
-		String^ send = gcnew String(buf);
-		arduino->WriteLine(send);		
-
-		memset(buf, 0, sizeof buf);
-		sprintf(buf, "maxrpm%.2f;", sharedData->mMaxRPM);
-		send = gcnew String(buf);
-		arduino->WriteLine(send);
-
-		memset(buf, 0, sizeof buf);
-		sprintf(buf, "gear%d;", sharedData->mGear);
-		send = gcnew String(buf);
-		arduino->WriteLine(send); */
 	}
-
-	// Cleanup
-	//myfile << "]\n";
-	myfile.close();
-	UnmapViewOfFile( sharedData );
-	CloseHandle( fileHandle );
-	//arduino->Close();
-
-	return 0;
 }
