@@ -1,5 +1,8 @@
 import json
-
+from io import BytesIO
+import zipfile
+import os
+from os import listdir
 import random
 
 with open('fichero.json') as json_data:
@@ -21,15 +24,13 @@ cont = 1
 tiempo_ant = 0.0
 tiempo = 0.0
 for linea in d:
-    
-    print (len(linea))
+
     if len(linea) == 12:
       #revisar
       if (linea[10] < tiempo_ant):
          tiempo = tiempo_ant + linea[10]
       else:
          tiempo = linea[10] 
-
       
       if first:
          km_iniciales = linea[11]
@@ -170,3 +171,12 @@ with open('trazada.json', 'w') as outfile:
 
 with open('info.json', 'w') as outfile:
         json.dump(fjson_info, outfile)
+
+dirname = "D:\idcma\Documents\GitHub\JustTelemetry-projectCars"
+with zipfile.ZipFile(str(fjson_info["id"]) + ".zip", 'w') as zf:
+    zf.write(os.path.join(dirname, "volante.json"), "volante.json")
+    zf.write(os.path.join(dirname, "acelerador.json"), "acelerador.json")
+    zf.write(os.path.join(dirname, "fuerzas.json"), "fuerzas.json")
+    zf.write(os.path.join(dirname, "ruedas.json"), "ruedas.json")
+    zf.write(os.path.join(dirname, "trazada.json"), "trazada.json")
+    zf.write(os.path.join(dirname, "info.json"), "info.json")
