@@ -47,16 +47,15 @@ int main()
 	myfile.open("fichero.json");
 	myfile << "[\n";
 
+	myfile << "[" << sharedData->mTrackLocation << "," << sharedData->mCarName << "," << sharedData->mCarClassName << "],\n";
+
 	while (true)
 	{
 		const bool isValidParticipantIndex = sharedData->mViewedParticipantIndex != -1 && sharedData->mViewedParticipantIndex < sharedData->mNumParticipants && sharedData->mViewedParticipantIndex < STORED_PARTICIPANTS_MAX;
 		if ( isValidParticipantIndex )
 		{
 			const ParticipantInfo& viewedParticipantInfo = sharedData->mParticipantInfo[sharedData->mViewedParticipantIndex];
-			//printf( "mParticipantName: (%s)\n", viewedParticipantInfo.mName );
-			//printf( "mWorldPosition: (%f,%f,%f)\n", viewedParticipantInfo.mWorldPosition[0], viewedParticipantInfo.mWorldPosition[1], viewedParticipantInfo.mWorldPosition[2] );
 
-			printf("%f\n", sharedData->mOdometerKM);
 			// Posición en la pista
 			float x = viewedParticipantInfo.mWorldPosition[0] * (-1); //Para invertir
 			float y = viewedParticipantInfo.mWorldPosition[2];
