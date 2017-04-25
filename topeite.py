@@ -25,6 +25,7 @@ tiempo_ant = 0.0
 tiempo = 0.0
 for linea in d:
 
+    # Para comprobar si es la primera linea
     if len(linea) == 12:
       #revisar
       if (linea[10] < tiempo_ant):
@@ -55,7 +56,34 @@ for linea in d:
 
       json_fuerzas_g.append([linea[8], linea[9] ,  linea[0], linea[1], tiempo]); 
 
-      json_posicion.append([linea[0], linea[1], tiempo])
+      # Trazada
+      json_ruedas_trazada = {}
+      json_ruedas_trazada["data"] = {}
+      json_ruedas_trazada["data"]["DI"] = linea[2]
+      json_ruedas_trazada["data"]["DD"] = linea[3]
+      json_ruedas_trazada["data"]["TI"] = linea[4]
+      json_ruedas_trazada["data"]["TD"] = linea[5]
+      json_ruedas_trazada["label"] = "ruedas"
+
+      json_acelerador_trazada = {}
+      json_acelerador_trazada["data"] = {}
+      json_acelerador_trazada["data"]["1"] = linea[7]
+      json_acelerador_trazada["data"]["2"] = linea[7]
+      json_acelerador_trazada["data"]["3"] = linea[7]
+      json_acelerador_trazada["data"]["4"] = linea[7]
+
+      json_direccion_trazada = {}
+      json_direccion_trazada["data"] = {}
+      json_direccion_trazada["data"]["Direccion"] = linea[6]
+      json_direccion_trazada["label"] = "volante"
+
+      json_fuerzas_trazada = {}
+      json_fuerzas_trazada["data"] = {}
+      json_fuerzas_trazada["data"]["x"] = linea[8]
+      json_fuerzas_trazada["data"]["y"] = linea[9]
+      json_fuerzas_trazada["label"] = "fuerzas"
+
+      json_posicion.append([linea[0], linea[1], tiempo, json_ruedas_trazada, json_direccion_trazada, json_fuerzas_trazada])
 
       tiempo_ant = tiempo 
     else:
@@ -113,7 +141,6 @@ data_acelerador["data"] = json_acelerador
 data_acelerador["label"] = "4"
 fjson_acelerador["4"] = data_acelerador
 
-
 # JSON de la direccion
 fjson_direccion = {}
 
@@ -147,11 +174,22 @@ str_tiempo = "%dm %ds" % (minutes, seconds)
 fjson_info["tiempo"] = str_tiempo
 
 import time
-fjson_info["fecha"] = time.strftime("%d/%m/%Y")
+fjson_info["fecha"] = time.strftime("%d-%m-%Y")
 fjson_info["descripcion"] = "Prueba realizada en " + circuito + " usando un " + coche + "(" + clase + ")"
 fjson_info["nombre"] = circuito + "-pCars"
 fjson_info["metros"] = distancia_recorrida * 1000
-fjson_info["id"] = random.randint(1000, 10000)
+
+id_sesion = random.randint(1000, 10000)
+
+while (True):
+
+  if not os.path.exists(str(id_sesion) + ".zip"):
+    print (str(id_sesion) + ".zip")
+    fjson_info["id"] = id_sesion
+    break;
+  else:
+    id_sesion = random.randint(1000, 10000)
+
 
 # Guardamos los ficheros
 with open('ruedas.json', 'w') as outfile:
