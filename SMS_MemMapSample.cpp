@@ -47,7 +47,7 @@ int main()
 	myfile.open("fichero.json");
 	myfile << "[\n";
 
-	myfile << "[" << sharedData->mTrackLocation << "," << sharedData->mCarName << "," << sharedData->mCarClassName << "],\n";
+	myfile << "[\"" << sharedData->mTrackLocation << "\",\"" << sharedData->mCarName << "\",\"" << sharedData->mCarClassName << "\"],\n";
 
 	while (true)
 	{
