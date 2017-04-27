@@ -5,6 +5,9 @@ import os
 from os import listdir
 import random
 
+circuito = "asd"
+coche = "asdasdasd"
+clase = "asdasdasdasd"
 with open('fichero.json') as json_data:
     d = json.load(json_data)
 
@@ -46,15 +49,15 @@ for linea in d:
         tiempo_final = tiempo 
          
       #Tiempo, medida, latitud, longitud
-      json_del_iz.append([tiempo, linea[2], linea[0], linea[1]])
-      json_del_de.append([tiempo, linea[3], linea[0], linea[1]])
-      json_tra_iz.append([tiempo, linea[4], linea[0], linea[1]])
-      json_tra_de.append([tiempo, linea[5], linea[0], linea[1]]) 
+      json_del_iz.append([tiempo, linea[2], linea[0], linea[1], linea[11]])
+      json_del_de.append([tiempo, linea[3], linea[0], linea[1], linea[11]])
+      json_tra_iz.append([tiempo, linea[4], linea[0], linea[1], linea[11]])
+      json_tra_de.append([tiempo, linea[5], linea[0], linea[1], linea[11]]) 
 
-      json_acelerador.append([tiempo, linea[7], linea[0], linea[1]]);
-      json_direccion.append([tiempo, linea[6], linea[0], linea[1]]);
+      json_acelerador.append([tiempo, linea[7], linea[0], linea[1], linea[11]]);
+      json_direccion.append([tiempo, linea[6], linea[0], linea[1], linea[11]]);
 
-      json_fuerzas_g.append([linea[8], linea[9] ,  linea[0], linea[1], tiempo]); 
+      json_fuerzas_g.append([linea[8], linea[9] ,  linea[0], linea[1], tiempo, linea[11]]); 
 
       # Trazada
       json_ruedas_trazada = {}
@@ -83,7 +86,7 @@ for linea in d:
       json_fuerzas_trazada["data"]["y"] = linea[9]
       json_fuerzas_trazada["label"] = "fuerzas"
 
-      json_posicion.append([linea[0], linea[1], tiempo, json_ruedas_trazada, json_direccion_trazada, json_fuerzas_trazada])
+      json_posicion.append([linea[0], linea[1], tiempo, linea[11], json_ruedas_trazada, json_direccion_trazada, json_fuerzas_trazada])
 
       tiempo_ant = tiempo 
     else:
